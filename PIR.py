@@ -1,4 +1,5 @@
 from gpiozero import MotionSensor
+import time
 
 # Define three PIR sensors
 pir1 = MotionSensor(4)
@@ -19,3 +20,5 @@ while True:
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 6)")
         pir3.wait_for_no_motion()
+    
+    time.sleep(0.1)  # small delay prevents deque mutation error
