@@ -1,0 +1,4 @@
+path: data_wild
+train: images/train
+val: images/val
+names: [squirrel, rat, groundhog]
