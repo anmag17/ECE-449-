@@ -2,15 +2,15 @@ from gpiozero import MotionSensor
 import time
 
 # Define three PIR sensors
-pir1 = MotionSensor(23)
+pir1 = MotionSensor(21)
 pir2 = MotionSensor(24)
 pir3 = MotionSensor(25)
 
-print("Motion sensors active (GPIO 23, 24, 25). Waiting for motion...")
+print("Motion sensors active (GPIO 21, 24, 25). Waiting for motion...")
 
 while True:
     if pir1.motion_detected:
-        print("Motion detected on PIR 1 (GPIO 23)")
+        print("Motion detected on PIR 1 (GPIO 21)")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
