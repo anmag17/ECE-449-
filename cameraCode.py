@@ -15,7 +15,7 @@ pir1 = MotionSensor(20)
 pir2 = MotionSensor(21)
 pir3 = MotionSensor(26)
 
-print("Motion sensors active (GPIO 4, 5, 6). Waiting for motion...")
+print("Motion sensors active (GPIO 20, 21, 26). Waiting for motion...")
 
 def capture_image(source: str):
     """Capture image with timestamp and sensor label."""
