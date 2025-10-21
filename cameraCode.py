@@ -25,7 +25,7 @@ def capture_image(source: str):
 
     print(f"📸 Capturing image: {out_path}")
     try:
-        subprocess.run([RPICAM_CMD, "-o", str(out_path)], check=True)
+        subprocess.run([RPICAM_CMD, "--camera", 1, "-o", str(out_path)], check=True)
         print(f"Saved: {out_path}")
     except subprocess.CalledProcessError as e:
         print(f"Capture failed: {e}")
