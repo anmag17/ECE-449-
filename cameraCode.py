@@ -5,7 +5,7 @@ from datetime import datetime
 from gpiozero import MotionSensor
 
 # ====== CONFIG ======
-SAVE_DIR = Path("/home/rpi/Desktop/ECE449  ")
+SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
 # ====================
