@@ -11,9 +11,9 @@ RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
 # ====================
 
 # Define three PIR sensors
-pir1 = MotionSensor(4)
-pir2 = MotionSensor(5)
-pir3 = MotionSensor(6)
+pir1 = MotionSensor(20)
+pir2 = MotionSensor(21)
+pir3 = MotionSensor(26)
 
 print("Motion sensors active (GPIO 4, 5, 6). Waiting for motion...")
 
@@ -33,17 +33,17 @@ def capture_image(source: str):
 # Main loop
 while True:
     if pir1.motion_detected:
-        print("Motion detected on PIR 1 (GPIO 4)")
+        print("Motion detected on PIR 1 (GPIO 20)")
         capture_image("pir1")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
-        print("Motion detected on PIR 2 (GPIO 5)")
+        print("Motion detected on PIR 2 (GPIO 21)")
         capture_image("pir2")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
-        print("Motion detected on PIR 3 (GPIO 6)")
+        print("Motion detected on PIR 3 (GPIO 26)")
         capture_image("pir3")
         pir3.wait_for_no_motion()
 
