@@ -23,9 +23,9 @@ def capture_image(source: str):
     filename = f"{source}_{timestamp}.jpg"
     out_path = SAVE_DIR / filename
 
-    print(f"📸 Capturing image: {out_path}")
+    print(f"📸 Capturing image: {out_path}", id)
     try:
-        subprocess.run([RPICAM_CMD, "--camera", "1", "-o", str(out_path)], check=True)
+        subprocess.run([RPICAM_CMD, "--camera", id, "-o", str(out_path)], check=True) 
         print(f"Saved: {out_path}")
     except subprocess.CalledProcessError as e:
         print(f"Capture failed: {e}")
@@ -34,17 +34,17 @@ def capture_image(source: str):
 while True:
     if pir1.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
-        capture_image("pir1")
+        capture_image("pir1", "1")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
-        capture_image("pir2")
+        capture_image("pir2", "1")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
-        capture_image("pir3")
+        capture_image("pir3", "0")
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
