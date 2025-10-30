@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime
 from gpiozero import MotionSensor
 from ultralytics import YOLO
+import cv2
 
 # ====== CONFIG ======
 SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
@@ -39,7 +40,7 @@ def capture_image(source: str):
     print(f"Capturing image: {out_path}")
     try:
         # subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 3 working cameras
-        subprocess.run([RPICAM_CMD, "--camera", "1", "-o", str(out_path)], check=True)
+        subprocess.run([RPICAM_CMD, "--camera", "0", "-o", str(out_path)], check=True)
         print(f"Saved: {out_path}")
         return out_path
     except subprocess.CalledProcessError as e:
@@ -59,7 +60,7 @@ def run_yolo_and_save(image_path: Path):
     # Save annotated image next to the original
     annotated = r.plot()  # numpy array (BGR)
     det_path = image_path.with_name(image_path.stem + "-det.jpg")
-    import cv2
+    
     cv2.imwrite(str(det_path), annotated)
 
     # Console summary
