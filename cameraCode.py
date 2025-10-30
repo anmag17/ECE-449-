@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 from datetime import datetime
 from gpiozero import MotionSensor
@@ -31,12 +32,12 @@ def capture_image(source: str):
     filename = f"{source}_{timestamp}.jpg"
     out_path = SAVE_DIR / filename
 
-    # print(f"📸 Capturing image: {out_path}", camera_num)  # for 2 working cameras
+    # print(f"📸 Capturing image: {out_path}", camera_num)  # for 3 working cameras
     print(f"📸 Capturing image: {out_path}")
-    # print(f"Capturing image: {out_path}", camera_num)  # for 2 working cameras
+    # print(f"Capturing image: {out_path}", camera_num)  # for 3 working cameras
     print(f"Capturing image: {out_path}")
     try:
-        # subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 2 working cameras
+        # subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 3 working cameras
         subprocess.run([RPICAM_CMD, "--camera", "1", "-o", str(out_path)], check=True)
         print(f"Saved: {out_path}")
         return out_path
@@ -78,7 +79,7 @@ while True:
         print("Motion detected on PIR 1 (GPIO 20)")
         capture_image("pir1")
         p = capture_image("pir1")
-        # capture_image("pir1", "1")  # with 2 working cameras
+        # capture_image("pir1", "0")  # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir1.wait_for_no_motion()
@@ -87,7 +88,7 @@ while True:
         print("Motion detected on PIR 2 (GPIO 21)")
         capture_image("pir2")
         p = capture_image("pir2")
-        # capture_image("pir2", "1")    # with 2 working cameras
+        # capture_image("pir2", "1")    # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir2.wait_for_no_motion()
@@ -96,7 +97,7 @@ while True:
         print("Motion detected on PIR 3 (GPIO 26)")
         capture_image("pir3")
         p = capture_image("pir3")
-        # capture_image("pir3", "0")    # with 2 working cameras
+        # capture_image("pir3", "2")    # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir3.wait_for_no_motion()
