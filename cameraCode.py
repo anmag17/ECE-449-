@@ -78,27 +78,24 @@ def run_yolo_and_save(image_path: Path):
 while True:
     if pir1.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
-        capture_image("pir1")
-        # p = capture_image("pir1")
-        capture_image("pir1", "0")  # with 3 working cameras
+        # capture_image("pir1")
+        p = capture_image("pir1", "0")  # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
-        capture_image("pir2")
-        # p = capture_image("pir2")
-        capture_image("pir2", "1")    # with 3 working cameras
+        # capture_image("pir2")
+        p = capture_image("pir2", "1")
         if p:
             run_yolo_and_save(p)
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
-        capture_image("pir3")
-        # p = capture_image("pir3")
-        capture_image("pir3", "2")    # with 3 working cameras
+        # capture_image("pir3")
+        p = capture_image("pir3", "2")    # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir3.wait_for_no_motion()
