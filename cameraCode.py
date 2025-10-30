@@ -28,19 +28,18 @@ print("Motion sensors active (GPIO 20, 21, 26). Waiting for motion...")
 # load once
 model = YOLO(MODEL_PATH)
 
-def capture_image(source: str):
+def capture_image(source: str, camera_num):
     """Capture image with timestamp and sensor label."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{source}_{timestamp}.jpg"
     out_path = SAVE_DIR / filename
 
-    # print(f"📸 Capturing image: {out_path}", camera_num)  # for 3 working cameras
-    print(f"📸 Capturing image: {out_path}")
-    # print(f"Capturing image: {out_path}", camera_num)  # for 3 working cameras
+    print(f"📸 Capturing image: {out_path}", camera_num)  # for 3 working cameras
+    # print(f"📸 Capturing image: {out_path}")
     print(f"Capturing image: {out_path}")
     try:
-        # subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 3 working cameras
-        subprocess.run([RPICAM_CMD, "--camera", "0", "-o", str(out_path)], check=True)
+        subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 3 working cameras
+        # subprocess.run([RPICAM_CMD, "--camera", "0", "-o", str(out_path)], check=True)
         print(f"Saved: {out_path}")
         return out_path
     except subprocess.CalledProcessError as e:
@@ -80,8 +79,8 @@ while True:
     if pir1.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
         capture_image("pir1")
-        p = capture_image("pir1")
-        # capture_image("pir1", "0")  # with 3 working cameras
+        # p = capture_image("pir1")
+        capture_image("pir1", "0")  # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir1.wait_for_no_motion()
@@ -89,8 +88,8 @@ while True:
     if pir2.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
         capture_image("pir2")
-        p = capture_image("pir2")
-        # capture_image("pir2", "1")    # with 3 working cameras
+        # p = capture_image("pir2")
+        capture_image("pir2", "1")    # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir2.wait_for_no_motion()
@@ -98,8 +97,8 @@ while True:
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
         capture_image("pir3")
-        p = capture_image("pir3")
-        # capture_image("pir3", "2")    # with 3 working cameras
+        # p = capture_image("pir3")
+        capture_image("pir3", "2")    # with 3 working cameras
         if p:
             run_yolo_and_save(p)
         pir3.wait_for_no_motion()
