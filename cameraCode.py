@@ -26,22 +26,22 @@ print("Motion sensors active (GPIO 20, 21, 26). Waiting for motion...")
 model = YOLO(MODEL_PATH)
 
 def capture_image(source: str):
-"""Capture image with timestamp and sensor label."""
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-filename = f"{source}_{timestamp}.jpg"
-out_path = SAVE_DIR / filename
+    """Capture image with timestamp and sensor label."""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{source}_{timestamp}.jpg"
+    out_path = SAVE_DIR / filename
 
     # print(f"📸 Capturing image: {out_path}", camera_num)  # for 2 working cameras
     print(f"📸 Capturing image: {out_path}")
     # print(f"Capturing image: {out_path}", camera_num)  # for 2 working cameras
     print(f"Capturing image: {out_path}")
-try:
-# subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 2 working cameras
-subprocess.run([RPICAM_CMD, "--camera", "1", "-o", str(out_path)], check=True)
-print(f"Saved: {out_path}")
+    try:
+        # subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 2 working cameras
+        subprocess.run([RPICAM_CMD, "--camera", "1", "-o", str(out_path)], check=True)
+        print(f"Saved: {out_path}")
         return out_path
-except subprocess.CalledProcessError as e:
-print(f"Capture failed: {e}")
+    except subprocess.CalledProcessError as e:
+        print(f"Capture failed: {e}")
         return None
 
 def run_yolo_and_save(image_path: Path):
@@ -74,31 +74,31 @@ def run_yolo_and_save(image_path: Path):
 
 # Main loop
 while True:
-if pir1.motion_detected:
-print("Motion detected on PIR 1 (GPIO 20)")
+    if pir1.motion_detected:
+        print("Motion detected on PIR 1 (GPIO 20)")
         capture_image("pir1")
         p = capture_image("pir1")
-# capture_image("pir1", "1")  # with 2 working cameras
+        # capture_image("pir1", "1")  # with 2 working cameras
         if p:
             run_yolo_and_save(p)
-pir1.wait_for_no_motion()
+        pir1.wait_for_no_motion()
 
-if pir2.motion_detected:
-print("Motion detected on PIR 2 (GPIO 21)")
+    if pir2.motion_detected:
+        print("Motion detected on PIR 2 (GPIO 21)")
         capture_image("pir2")
         p = capture_image("pir2")
-# capture_image("pir2", "1")    # with 2 working cameras
+        # capture_image("pir2", "1")    # with 2 working cameras
         if p:
             run_yolo_and_save(p)
-pir2.wait_for_no_motion()
+        pir2.wait_for_no_motion()
 
-if pir3.motion_detected:
-print("Motion detected on PIR 3 (GPIO 26)")
+    if pir3.motion_detected:
+        print("Motion detected on PIR 3 (GPIO 26)")
         capture_image("pir3")
         p = capture_image("pir3")
-# capture_image("pir3", "0")    # with 2 working cameras
+        # capture_image("pir3", "0")    # with 2 working cameras
         if p:
             run_yolo_and_save(p)
-pir3.wait_for_no_motion()
+        pir3.wait_for_no_motion()
 
-time.sleep(0.1)
+    time.sleep(0.1)
