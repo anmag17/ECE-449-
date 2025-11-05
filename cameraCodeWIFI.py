@@ -49,8 +49,8 @@ def capture_image(source: str, camera_num):
     filename = f"{source}_{timestamp}.jpg"
     out_path = SAVE_DIR / filename
 
-    print(f"📸 Capturing image: {out_path}", camera_num)  # for 3 working cameras
-    # print(f"📸 Capturing image: {out_path}")
+    print(f"Capturing image: {out_path}", camera_num)  # for 3 working cameras
+    # print(f"Capturing image: {out_path}")
     print(f"Capturing image: {out_path}")
     try:
         subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)     # for 3 working cameras
