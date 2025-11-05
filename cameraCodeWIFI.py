@@ -13,7 +13,7 @@ SAVE_DIR.mkdir(parents=True, exist_ok=True)
 RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
 MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt"
 
-ESP32_IP = ""  # Replace with your ESP32’s IP
+ESP32_IP = "192.168.68.150"  # Replace with your ESP32’s IP
 PORT = 4210 #this depends on ESP code
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
