@@ -71,24 +71,30 @@ def run_yolo_and_save(image_path: Path):
         verbose=False
     )
     r = results[0]
-    # Save annotated image next to the original
-    annotated = r.plot()  # numpy array (BGR)
+    annotated = r.plot()
     det_path = image_path.with_name(image_path.stem + "-det.jpg")
-    
     cv2.imwrite(str(det_path), annotated)
 
-    # Console summary
     boxes = getattr(r, "boxes", None)
+    detected_classes = []
+
     if boxes is not None and len(boxes) > 0:
         names = r.names
         cls_ids = boxes.cls.tolist()
         confs = boxes.conf.tolist()
+
         summary = ", ".join(f"{names[int(i)]}:{c:.2f}" for i, c in zip(cls_ids, confs))
         print(f"Detections: {summary}")
+
+        # collect detected class names
+        detected_classes = [names[int(i)].lower() for i in cls_ids]
     else:
         print("Detections: none")
-    print(f"Annotated saved: {det_path}")
 
+    print(f"Annotated saved: {det_path}")
+    return detected_classes
+
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel"}
 # Main loop
 while True:
     if pir1.motion_detected:
@@ -96,7 +102,9 @@ while True:
         # capture_image("pir1")
         p = capture_image("pir1", "0")  # with 3 working cameras
         if p:
-            run_yolo_and_save(p)
+            detected = run_yolo_and_save(p)
+            if any(obj in TARGET_CLASSES for obj in detected):
+                sendWiFi("Deter3")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
@@ -104,7 +112,9 @@ while True:
         # capture_image("pir2")
         p = capture_image("pir2", "1")
         if p:
-            run_yolo_and_save(p)
+            detected = run_yolo_and_save(p)
+            if any(obj in TARGET_CLASSES for obj in detected):
+                sendWiFi("Deter3")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
@@ -112,7 +122,9 @@ while True:
         # capture_image("pir3")
         p = capture_image("pir3", "2")    # with 3 working cameras
         if p:
-            run_yolo_and_save(p)
+            detected = run_yolo_and_save(p)
+            if any(obj in TARGET_CLASSES for obj in detected):
+                sendWiFi("Deter3")
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
