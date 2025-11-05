@@ -23,6 +23,7 @@ if __name__ == "__main__":
             msg = f"Ping {count}"
             sendWiFi(msg)
             sendWiFi("DETER")
+            sendWiFi("OFF")
             count += 1
             time.sleep(2)  # send every 2 seconds
     except KeyboardInterrupt:
