@@ -10,7 +10,7 @@ import cv2
 SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/best.pt"
+MODEL_PATH = "/home/rpi/Desktop/ECE449/ECE-449-/best.pt"
 # ====================
 
 #model setup
