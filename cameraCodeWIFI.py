@@ -104,7 +104,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("Deter3")
+                sendWiFi("DETER")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
@@ -114,7 +114,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("Deter3")
+                sendWiFi("DETER")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
@@ -124,7 +124,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("Deter3")
+                sendWiFi("DETER")
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
