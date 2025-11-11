@@ -3,8 +3,8 @@ import time
 
 # Define three PIR sensors
 pir1 = MotionSensor(21)
-pir2 = MotionSensor(24)
-pir3 = MotionSensor(25)
+pir2 = MotionSensor(20)
+pir3 = MotionSensor(26)
 
 print("Motion sensors active (GPIO 21, 24, 25). Waiting for motion...")
 
