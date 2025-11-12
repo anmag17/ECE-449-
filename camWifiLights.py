@@ -32,8 +32,8 @@ pir3 = MotionSensor(26)
 
 # Define LEDs corresponding to each PIR
 led1 = LED(27)
-led2 = LED(23)
-led3 = LED(24)
+#led2 = LED(23)
+#led3 = LED(24)
 
 print("Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27, 23, 24.")
 
@@ -109,27 +109,27 @@ while True:
     if pir2.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
         if is_night_time():
-            led2.on()
+            led1.on()
             time.sleep(0.2)
         p = capture_image("pir2", "1")
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-        led2.off()
+        led1.off()
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
         if is_night_time():
-            led3.on()
+            led1.on()
             time.sleep(0.2)
         p = capture_image("pir3", "2")
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-        led3.off()
+        led1.off()
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
