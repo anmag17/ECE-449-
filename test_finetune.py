@@ -11,7 +11,7 @@ import socket
 SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/ECE-449-/finetuned_yolo.pt"
+MODEL_PATH = "/home/rpi/Desktop/ECE449/finetuned_yolo.pt"
 
 ESP32_IP = "192.168.68.150"  # Replace with your ESP32’s IP
 PORT = 4210 #this depends on ESP code
