@@ -89,7 +89,7 @@ def run_yolo_and_save(image_path: Path):
     print(f"Annotated saved: {det_path}")
     return detected_classes
 
-TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel"}
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow"}
 
 # Main loop
 while True:
