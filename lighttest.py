@@ -2,7 +2,7 @@ from gpiozero import LED
 import time
 
 # Define LED on GPIO 27
-led = LED(27)
+led = LED(16)
 
 print("Testing LED on GPIO 27...")
 
