@@ -17,6 +17,8 @@ try:
         if is_night_time():
             print(f"{datetime.now()}: Nighttime detected — LED ON")
             led.on()
+            time.sleep(1)
+            led.off()
         else:
             print(f"{datetime.now()}: Daytime detected — LED OFF")
             led.off()
