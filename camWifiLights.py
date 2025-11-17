@@ -99,11 +99,11 @@ while True:
             led1.on()
             time.sleep(0.2)  # small delay for light to illuminate scene
         p = capture_image("pir1", "0")
+        led1.off()
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-        led1.off()
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
@@ -112,11 +112,11 @@ while True:
             led1.on()
             time.sleep(0.2)
         p = capture_image("pir2", "1")
+        led1.off()
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-        led1.off()
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
@@ -125,11 +125,11 @@ while True:
             led1.on()
             time.sleep(0.2)
         p = capture_image("pir3", "2")
+        led1.off()
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-        led1.off()
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
