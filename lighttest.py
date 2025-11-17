@@ -10,10 +10,10 @@ try:
     while True:
         print("LED ON")
         led.on()
-        time.sleep(1)
+        time.sleep(10)
         print("LED OFF")
         led.off()
-        time.sleep(1)
+        time.sleep(10)
 
 except KeyboardInterrupt:
     print("Test stopped by user.")
