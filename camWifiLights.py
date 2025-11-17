@@ -7,6 +7,7 @@ from ultralytics import YOLO
 import cv2
 import socket
 
+# set to True for farm testing (saves images in a separate folder)
 FARM_MODE = False
 
 # ====== CONFIG ======
@@ -43,20 +44,20 @@ ledstrip = LED(16)
 
 # ====== HELPER FUNCTIONS ======
 
-'''function to send message to deter ESP32 via wifi'''
+# function to send message to deter ESP32 via wifi
 def sendWiFi(message: str):
     data = message.encode()
     sock.sendto(data, (ESP32_IP, PORT))
     print(f"Sent: {message}")
 
 
-'''function to determine if lights are needed for night images (after 5pm or before 9am)'''
+# function to determine if lights are needed for night images (after 5pm or before 9am)
 def is_night_time():
     hour = datetime.now().hour
     return hour >= 17 or hour < 9   # returns boolean
 
 
-'''function to capture image from specified camera'''
+# function to capture image from specified camera
 def capture_image(source: str, camera_num):
     print(f"Capturing image: {out_path} (camera {camera_num})")
     # image filepath
@@ -77,7 +78,7 @@ def capture_image(source: str, camera_num):
         return None
 
 
-'''function to run YOLO on image and save annotated result'''
+# function to run YOLO on image and save annotated result
 def run_yolo_and_save(image_path: Path):
     print(f"Running YOLO on {image_path}")
     # run YOLO model and generate annotated image with bounding boxes
@@ -92,6 +93,7 @@ def run_yolo_and_save(image_path: Path):
         det_filename = image_path.stem + "-det.jpg"
         det_path = ANNOTATED_DIR / det_filename
     cv2.imwrite(str(det_path), annotated)
+    print(f"Annotated image saved: {det_path}")
    
     # extract detected classes + confidence scores
     boxes = getattr(r, "boxes", None)
@@ -105,8 +107,6 @@ def run_yolo_and_save(image_path: Path):
         detected_classes = [names[int(i)].lower() for i in cls_ids]
     else:
         print("Detections: none")
-
-    print(f"Annotated image saved: {det_path}")
     return detected_classes
 
 
@@ -122,7 +122,7 @@ print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
 # run YOLO, send wifi ping to deter if target animal detected
 while True:
     if pir0.motion_detected:
-        print("Motion detected on PIR 1 (GPIO 20)")
+        print("Motion detected on PIR 0 (GPIO 26)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
@@ -134,11 +134,11 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir0/cam0")
+                print("DETER sent. pir0/cam0\n")
         pir0.wait_for_no_motion()
 
     if pir1.motion_detected:
-        print("Motion detected on PIR 2 (GPIO 21)")
+        print("Motion detected on PIR 1 (GPIO 21)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
@@ -150,11 +150,11 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir1/cam1")
+                print("DETER sent. pir1/cam1\n")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
-        print("Motion detected on PIR 3 (GPIO 26)")
+        print("Motion detected on PIR 2 (GPIO 20)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
@@ -166,7 +166,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir2/cam2")
+                print("DETER sent. pir2/cam2\n")
         pir2.wait_for_no_motion()
 
     time.sleep(0.1)
