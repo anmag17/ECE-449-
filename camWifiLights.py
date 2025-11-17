@@ -7,76 +7,95 @@ from ultralytics import YOLO
 import cv2
 import socket
 
-# CONFIG
-# model + photo storage
-SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")  
-# SAVE_DIR = Path("/home/rpi/Desktop/ECE449/testing-photos")  # uncomment for farm testing
-SAVE_DIR.mkdir(parents=True, exist_ok=True)
-RPICAM_CMD = "rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained model
+FARM_MODE = False
 
-# wifi ping
+# ====== CONFIG ======
+# photo storage
+if not FARM_MODE:
+    SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
+    SAVE_DIR.mkdir(parents=True, exist_ok=True)
+else:
+    ALLPHOTOS_DIR = Path("/home/rpi/Desktop/ECE449/testing-photos")
+    ANNOTATED_DIR = ALLPHOTOS_DIR / "annotated"
+    ALLPHOTOS_DIR.mkdir(parents=True, exist_ok=True)
+    ANNOTATED_DIR.mkdir(parents=True, exist_ok=True)
+
+RPICAM_CMD = "rpicam-jpeg"
+MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained YOLOv3 model
+
+# Wifi ping
 ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
 PORT = 4210                  # must match ESP32 code
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# model setup
+# YOLO model
 CONF = 0.25
 IMGSZ = 416
 DEVICE = "cpu"
+model = YOLO(MODEL_PATH)
 
-# Define three PIR sensors
+# Define GPIO pins for three PIR sensors and LED strip
 pir0 = MotionSensor(26)
 pir1 = MotionSensor(21)
 pir2 = MotionSensor(20)
-
-# Define light/LED strip
 ledstrip = LED(16)
 
-# Load YOLO model once
-model = YOLO(MODEL_PATH)
 
-print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
+# ====== HELPER FUNCTIONS ======
 
-# function to send message across wifi to Deter ESP32
+'''function to send message to deter ESP32 via wifi'''
 def sendWiFi(message: str):
     data = message.encode()
     sock.sendto(data, (ESP32_IP, PORT))
     print(f"Sent: {message}")
 
-# function to check time to determine if lights are needed
-def is_night_time():
-    """Return True if current time is after 5 PM or before 9 AM."""
-    hour = datetime.now().hour
-    return hour >= 17 or hour < 9
 
-# function to capture image from specified camera
+'''function to determine if lights are needed for night images (after 5pm or before 9am)'''
+def is_night_time():
+    hour = datetime.now().hour
+    return hour >= 17 or hour < 9   # returns boolean
+
+
+'''function to capture image from specified camera'''
 def capture_image(source: str, camera_num):
+    print(f"Capturing image: {out_path} (camera {camera_num})")
+    # image filepath
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{source}_{timestamp}.jpg"
-    out_path = SAVE_DIR / filename
-
-    print(f"Capturing image: {out_path} (camera {camera_num})")
+    if not FARM_MODE:
+        out_path = SAVE_DIR / filename
+    else:
+        out_path = ALLPHOTOS_DIR / filename
+    
+    # capture image from specified camera
     try:
         subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)
-        print(f"Saved: {out_path}")
+        print(f"Image captured: {out_path}")
         return out_path
     except subprocess.CalledProcessError as e:
         print(f"Capture failed: {e}")
         return None
 
-# function to run YOLO on image and save annotated result
+
+'''function to run YOLO on image and save annotated result'''
 def run_yolo_and_save(image_path: Path):
     print(f"Running YOLO on {image_path}")
+    # run YOLO model and generate annotated image with bounding boxes
     results = model.predict(source=str(image_path), imgsz=IMGSZ, conf=CONF, device=DEVICE, verbose=False)
     r = results[0]
     annotated = r.plot()
-    det_path = image_path.with_name(image_path.stem + "-det.jpg")
+    
+    # image filepath
+    if not FARM_MODE:
+        det_path = image_path.with_name(image_path.stem + "-det.jpg")
+    else:
+        det_filename = image_path.stem + "-det.jpg"
+        det_path = ANNOTATED_DIR / det_filename
     cv2.imwrite(str(det_path), annotated)
-
+   
+    # extract detected classes + confidence scores
     boxes = getattr(r, "boxes", None)
     detected_classes = []
-
     if boxes is not None and len(boxes) > 0:
         names = r.names
         cls_ids = boxes.cls.tolist()
@@ -87,18 +106,20 @@ def run_yolo_and_save(image_path: Path):
     else:
         print("Detections: none")
 
-    print(f"Annotated saved: {det_path}")
+    print(f"Annotated image saved: {det_path}")
     return detected_classes
 
-# possible target classes from pre-trained YOLOv3 model
-TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", 
-                  "elephant", "cow", "rat", "otter", "dog", "mouse", "horse", "sheep",
-                  "bear", "bird", "zebra", "giraffe", 
-                  "banana"}
 
-# MAIN LOOP
-# detect motion from PIR sensor, capture image from corresponding camera, 
-# run YOLO, send wifi ping to deter if target detected
+# ===== MAIN LOOP ======
+
+# possible target classes from pre-trained YOLOv3 model
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow", "rat", 
+                  "otter", "dog", "mouse", "horse", "sheep", "bear", "bird", "zebra", "giraffe", "banana"}
+
+print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
+
+# main detect loop: detect motion from PIR sensor, capture image from corresponding camera, 
+# run YOLO, send wifi ping to deter if target animal detected
 while True:
     if pir0.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
