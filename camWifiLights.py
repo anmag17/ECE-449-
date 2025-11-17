@@ -26,9 +26,9 @@ IMGSZ = 416
 DEVICE = "cpu"
 
 # Define three PIR sensors
-pir1 = MotionSensor(20)
-pir2 = MotionSensor(21)
-pir3 = MotionSensor(26)
+pir0 = MotionSensor(26)
+pir1 = MotionSensor(21)
+pir2 = MotionSensor(20)
 
 # Define light/LED strip
 ledstrip = LED(16)
@@ -100,52 +100,52 @@ TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat",
 # detect motion from PIR sensor, capture image from corresponding camera, 
 # run YOLO, send wifi ping to deter if target detected
 while True:
-    if pir1.motion_detected:
+    if pir0.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)  # small delay for light to illuminate scene
-        p = capture_image("pir1", "0")
+        p = capture_image("pir0", "0")
         ledstrip.off()
         # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir1/cam0")
-        pir1.wait_for_no_motion()
+                print("DETER sent. pir0/cam0")
+        pir0.wait_for_no_motion()
 
-    if pir2.motion_detected:
+    if pir1.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)
-        p = capture_image("pir2", "1")
+        p = capture_image("pir1", "1")
         ledstrip.off()
         # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir2/cam1")
-        pir2.wait_for_no_motion()
+                print("DETER sent. pir1/cam1")
+        pir1.wait_for_no_motion()
 
-    if pir3.motion_detected:
+    if pir2.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)
-        p = capture_image("pir3", "2")
+        p = capture_image("pir2", "2")
         ledstrip.off()
         # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
-                print("DETER sent. pir3/cam2")
-        pir3.wait_for_no_motion()
+                print("DETER sent. pir2/cam2")
+        pir2.wait_for_no_motion()
 
     time.sleep(0.1)
