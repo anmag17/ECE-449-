@@ -89,7 +89,7 @@ def run_yolo_and_save(image_path: Path):
     print(f"Annotated saved: {det_path}")
     return detected_classes
 
-TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow"}
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow", "rat", "otter"}
 
 # Main loop
 while True:
@@ -104,6 +104,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir1/cam0")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
@@ -117,6 +118,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir2/cam1")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
@@ -130,6 +132,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir3/cam2")
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
