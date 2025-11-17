@@ -8,7 +8,7 @@ led = LED(27)
 def is_night_time():
     """Return True if current time is after 5 PM or before 9 AM."""
     hour = datetime.now().hour
-    return hour >= 17 or hour < 9
+    return hour >= 17 or hour < 12
 
 print("Testing LED on GPIO 27 with time check...")
 
