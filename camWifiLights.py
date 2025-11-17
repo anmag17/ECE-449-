@@ -35,7 +35,7 @@ led1 = LED(27)
 #led2 = LED(23)
 #led3 = LED(24)
 
-print("Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27, 23, 24.")
+print("Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27")
 
 # WiFi function
 def sendWiFi(message: str):
