@@ -7,7 +7,7 @@ from ultralytics import YOLO
 import cv2
 import socket
 
-# ====== CONFIG ======
+# CONFIG
 # model + photo storage
 SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")  
 # SAVE_DIR = Path("/home/rpi/Desktop/ECE449/testing-photos")  # uncomment for farm testing
@@ -18,10 +18,7 @@ MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained model
 # wifi ping
 ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
 PORT = 4210                  # must match ESP32 code
-
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-# ====================
 
 # model setup
 CONF = 0.25
@@ -41,7 +38,7 @@ model = YOLO(MODEL_PATH)
 
 print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
 
-# function to send message across wifi to ESP32
+# function to send message across wifi to Deter ESP32
 def sendWiFi(message: str):
     data = message.encode()
     sock.sendto(data, (ESP32_IP, PORT))
@@ -68,6 +65,7 @@ def capture_image(source: str, camera_num):
         print(f"Capture failed: {e}")
         return None
 
+# function to run YOLO on image and save annotated result
 def run_yolo_and_save(image_path: Path):
     print(f"Running YOLO on {image_path}")
     results = model.predict(source=str(image_path), imgsz=IMGSZ, conf=CONF, device=DEVICE, verbose=False)
@@ -92,21 +90,25 @@ def run_yolo_and_save(image_path: Path):
     print(f"Annotated saved: {det_path}")
     return detected_classes
 
-# target classes for DETER from pre-trained YOLO model
+# possible target classes from pre-trained YOLOv3 model
 TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", 
                   "elephant", "cow", "rat", "otter", "dog", "mouse", "horse", "sheep",
                   "bear", "bird", "zebra", "giraffe", 
                   "banana"}
 
-# Main loop
+# MAIN LOOP
+# detect motion from PIR sensor, capture image from corresponding camera, 
+# run YOLO, send wifi ping to deter if target detected
 while True:
     if pir1.motion_detected:
         print("Motion detected on PIR 1 (GPIO 20)")
+        # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)  # small delay for light to illuminate scene
         p = capture_image("pir1", "0")
         ledstrip.off()
+        # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
@@ -116,11 +118,13 @@ while True:
 
     if pir2.motion_detected:
         print("Motion detected on PIR 2 (GPIO 21)")
+        # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)
         p = capture_image("pir2", "1")
         ledstrip.off()
+        # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
@@ -130,11 +134,13 @@ while True:
 
     if pir3.motion_detected:
         print("Motion detected on PIR 3 (GPIO 26)")
+        # check if night time for lights
         if is_night_time():
             ledstrip.on()
             time.sleep(0.2)
         p = capture_image("pir3", "2")
         ledstrip.off()
+        # run YOLO to check for target animal
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
