@@ -31,7 +31,7 @@ pir2 = MotionSensor(21)
 pir3 = MotionSensor(26)
 
 # Define light/LED strip
-ledstrip = LED(27)
+ledstrip = LED(16)
 
 # Load YOLO model once
 model = YOLO(MODEL_PATH)
