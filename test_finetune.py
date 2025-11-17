@@ -11,7 +11,8 @@ import socket
 SAVE_DIR = Path("/home/rpi/Desktop/ECE449/photos")
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
 RPICAM_CMD = "rpicam-jpeg"  # full path if needed, e.g. "/usr/bin/rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/best-4.pt"
+# MODEL_PATH = "/home/rpi/Desktop/ECE-449-/finetuned_yolo.pt"
+MODEL_PATH = Path(__file__).parent / "best-4.pt"
 
 ESP32_IP = "192.168.68.150"  # Replace with your ESP32’s IP
 PORT = 4210 #this depends on ESP code
@@ -94,7 +95,7 @@ def run_yolo_and_save(image_path: Path):
     print(f"Annotated saved: {det_path}")
     return detected_classes
 
-TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow"}
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "rat", "otter"}
 # Main loop
 while True:
     if pir1.motion_detected:
@@ -105,6 +106,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir1/cam0")
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
@@ -115,6 +117,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir2/cam1")
         pir2.wait_for_no_motion()
 
     if pir3.motion_detected:
@@ -125,6 +128,7 @@ while True:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
                 sendWiFi("DETER")
+                print("DETER sent. pir3/cam2")
         pir3.wait_for_no_motion()
 
     time.sleep(0.1)
