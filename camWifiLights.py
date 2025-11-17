@@ -89,7 +89,10 @@ def run_yolo_and_save(image_path: Path):
     print(f"Annotated saved: {det_path}")
     return detected_classes
 
-TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow", "rat", "otter", "dog"}
+# target classes for DETER from pre-trained YOLO model
+TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", 
+                  "elephant", "cow", "rat", "otter", "dog", "mouse", "horse", "sheep",
+                  "bear", "bird", "zebra", "giraffe"}
 
 # Main loop
 while True:
