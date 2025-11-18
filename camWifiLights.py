@@ -37,8 +37,8 @@ model = YOLO(MODEL_PATH)
 
 # Define GPIO pins for three PIR sensors and LED strip
 pir0 = MotionSensor(26)
-pir1 = MotionSensor(21)
-pir2 = MotionSensor(20)
+pir1 = MotionSensor(20)
+pir2 = MotionSensor(21)
 ledstrip = LED(16)
 
 
