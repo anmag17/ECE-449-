@@ -138,7 +138,7 @@ while True:
         pir0.wait_for_no_motion()
 
     if pir1.motion_detected:
-        print("Motion detected on PIR 1 (GPIO 21)")
+        print("Motion detected on PIR 1 (GPIO 20)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
@@ -154,7 +154,7 @@ while True:
         pir1.wait_for_no_motion()
 
     if pir2.motion_detected:
-        print("Motion detected on PIR 2 (GPIO 20)")
+        print("Motion detected on PIR 2 (GPIO 21)")
         # check if night time for lights
         if is_night_time():
             ledstrip.on()
