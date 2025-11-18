@@ -59,7 +59,7 @@ def is_night_time():
 
 # function to capture image from specified camera
 def capture_image(source: str, camera_num):
-    print(f"Capturing image: {out_path} (camera {camera_num})")
+    print(f"Capturing image: (camera {camera_num})")
     # image filepath
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{source}_{timestamp}.jpg"
