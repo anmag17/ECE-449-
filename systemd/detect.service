@@ -1,5 +1,5 @@
 [Unit]
-Description=ECE449 Group 3 Final Detect Script
+Description=ECE449 Group 3 Final Detect Script - run on boot without internet
 After=network-online.target
 Wants=network-online.target
 

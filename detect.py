@@ -10,6 +10,8 @@ import socket
 # set to True for farm testing (saves images in a separate folder)
 FARM_MODE = True
 
+print("Starting detect.py...")
+
 # ====== CONFIG ======
 # photo storage
 if not FARM_MODE:
