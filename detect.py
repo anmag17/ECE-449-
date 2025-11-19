@@ -8,7 +8,7 @@ import cv2
 import socket
 
 # set to True for farm testing (saves images in a separate folder)
-FARM_MODE = True
+FARM_MODE = False
 
 print("Starting detect.py...")
 
