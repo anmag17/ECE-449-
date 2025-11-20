@@ -3,12 +3,12 @@ from datetime import datetime
 import time
 
 # Define LED on GPIO 27
-led = LED(27)
+led = LED(16)
 
 def is_night_time():
     """Return True if current time is after 5 PM or before 9 AM."""
     hour = datetime.now().hour
-    return hour >= 17 or hour < 12
+    return hour >= 18 or hour < 16
 
 print("Testing LED on GPIO 27 with time check...")
 

@@ -1,0 +1,14 @@
+[Unit]
+Description=ECE449 Group 3 Final Detect Script - run on boot without internet
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=rpi
+WorkingDirectory=/home/rpi/Desktop/ECE449/ECE-449-
+ExecStart=/usr/bin/python3 /home/rpi/Desktop/ECE449/ECE-449-/detect.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
