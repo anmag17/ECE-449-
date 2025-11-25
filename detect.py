@@ -6,6 +6,7 @@ from gpiozero import MotionSensor, LED
 from ultralytics import YOLO
 import cv2
 import socket
+import sys
 
 # set to True for farm testing (saves images in a separate folder)
 FARM_MODE = True
@@ -27,9 +28,9 @@ RPICAM_CMD = "rpicam-jpeg"
 MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained YOLOv3 model
 
 # Wifi ping
-ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
-PORT = 4210                  # must match ESP32 code
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
+#PORT = 4210                  # must match ESP32 code
+#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # YOLO model
 CONF = 0.25
@@ -48,9 +49,12 @@ ledstrip = LED(16)
 
 # function to send message to deter ESP32 via wifi
 def sendWiFi(message: str):
-    data = message.encode()
-    sock.sendto(data, (ESP32_IP, PORT))
-    print(f"Sent: {message}")
+    for i in range(0, 256):
+        ESP_IP = f"192.168.68.{i}" 
+        PORT = 5005
+        cmd = sys.argv[1] if len(sys.argv)  > 1 else "DETER3"
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.sendto(cmd.encode(), (ESP_IP, PORT))
 
 
 # function to determine if lights are needed for night images (after 5pm or before 9am)
