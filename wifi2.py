@@ -1,32 +1,47 @@
 import socket
 import sys
+# You might need the 'netifaces' library here, but a simpler method is often to use the 'ip' library result.
+# For simplicity, we'll try a common trick:
 
-    # function to send message to deter ESP32 via wifi
-def sendWiFi():
-    ESP_PORT = 5005
-    # Use the Broadcast IP for your subnet. 
-    # If your IP is 192.168.68.x, the broadcast is usually .255
-    BROADCAST_IP = "192.168.68.255" 
+def get_wlan0_ip():
+    # Placeholder: In a real system, you'd use 'socket.gethostbyname(socket.gethostname())'
+    # or an external library/command to reliably get the wlan0 IP.
+    # For now, let's assume the router is .1 and we're looking for the broadcast source IP.
     
-    cmd = "D3" # Default command
-    
-    # Safety check for sys.argv to prevent crashes if args are missing
-    if len(sys.argv) > 1:
-        cmd = sys.argv[1]
-
+    # A reliable way on a Pi is to look up the IP of the wlan0 interface.
+    # Let's use a try-catch and rely on the IP being in the range 192.168.68.X
     try:
-        # Create socket
+        # Create a temporary socket to determine the local IP used for external communication
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("192.168.68.1", 1)) # Connect to the router/gateway on the network
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except:
+        print("Warning: Could not automatically determine local IP. Using 0.0.0.0.")
+        return '0.0.0.0' # Fail-safe
+
+
+def sendWiFi():
+    ESP_IP = "192.168.68.255"
+    PORT = 5005
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "D3"
+    local_source_ip = get_wlan0_ip() # <-- NEW: Get the source IP
+
+    print("Attempting to send WiFi command...")
+    
+    try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Set option to allow Broadcast packets (Essential!)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         
-        print(f"Sending WiFi command '{cmd}' to {BROADCAST_IP}...")
-        sock.sendto(cmd.encode(), (BROADCAST_IP, ESP_PORT))
+        # *** CRITICAL FIX: Explicitly bind the socket to the local Wi-Fi interface's IP ***
+        sock.bind((local_source_ip, 0)) # 0 means use any available port
+
+        sock.sendto(cmd.encode(), (ESP_IP, PORT))
         sock.close()
-        print("WiFi packet sent.")
+        print(f"WiFi broadcast '{cmd}' sent from {local_source_ip} to {ESP_IP}")
         
     except Exception as e:
-        print(f"Error sending WiFi: {e}")
-
-if __name__ == "__main__":
-    sendWiFi()
+        # The script is crashing here. This print statement will now show you the error!
+        print(f"FATAL: Failed to send WiFi, CRASH ERROR: {e}")
+        # To prevent silent crashing in service mode, you MUST have this catch block!
