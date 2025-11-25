@@ -48,11 +48,11 @@ ledstrip = LED(16)
 # ====== HELPER FUNCTIONS ======
 
 # function to send message to deter ESP32 via wifi
-def sendWiFi(message: str):
+def sendWiFi():
     for i in range(0, 256):
         ESP_IP = f"192.168.68.{i}" 
         PORT = 5005
-        cmd = sys.argv[1] if len(sys.argv)  > 1 else "DETER3"
+        cmd = sys.argv[1] if len(sys.argv)  > 1 else "D3"
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.sendto(cmd.encode(), (ESP_IP, PORT))
 
@@ -139,7 +139,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("DETER")
+                sendWiFi()
                 print("DETER sent. pir0/cam0\n")
         pir0.wait_for_no_motion()
 
@@ -155,7 +155,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("DETER")
+                sendWiFi()
                 print("DETER sent. pir1/cam1\n")
         pir1.wait_for_no_motion()
 
@@ -171,7 +171,7 @@ while True:
         if p:
             detected = run_yolo_and_save(p)
             if any(obj in TARGET_CLASSES for obj in detected):
-                sendWiFi("DETER")
+                sendWiFi()
                 print("DETER sent. pir2/cam2\n")
         pir2.wait_for_no_motion()
 
