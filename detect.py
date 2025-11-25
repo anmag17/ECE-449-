@@ -49,7 +49,7 @@ ledstrip = LED(16)
 
 # function to send message to deter ESP32 via wifi
 def sendWiFi():
-    for i in range(0, 256):
+    for i in range(0, 255):
         ESP_IP = f"192.168.68.{i}" 
         PORT = 5005
         cmd = sys.argv[1] if len(sys.argv)  > 1 else "D3"
