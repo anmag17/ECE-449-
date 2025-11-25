@@ -53,8 +53,10 @@ def sendWiFi():
         ESP_IP = f"192.168.68.{i}" 
         PORT = 5005
         cmd = sys.argv[1] if len(sys.argv)  > 1 else "D3"
+
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.sendto(cmd.encode(), (ESP_IP, PORT))
+        sock.close()
 
 
 # function to determine if lights are needed for night images (after 5pm or before 9am)
