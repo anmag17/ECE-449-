@@ -1,14 +1,15 @@
 [Unit]
-Description=ECE449 Group 3 Final Detect Script - run on boot without internet
-After=network-online.target
-Wants=network-online.target
+Description=ECE449 Detect Script – wait until Wi‑Fi truly ready
+After=network.target dhcpcd.service
+Requires=dhcpcd.service
 
 [Service]
 User=rpi
 WorkingDirectory=/home/rpi/Desktop/ECE449/ECE-449-
-ExecStartPre=/bin/bash -c 'while ! /sbin/ip addr show wlan0 | grep -q "inet "; do echo "Waiting for WiFi..."; sleep 2; done'
+# Wait until wlan0 has an IP address
+ExecStartPre=/bin/bash -c 'until /sbin/ip addr show wlan0 | grep -q "inet "; do echo "Waiting for wlan0 IP..."; sleep 3; done'
 ExecStart=/usr/bin/python3 /home/rpi/Desktop/ECE449/ECE-449-/detect.py
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]
