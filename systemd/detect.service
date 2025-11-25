@@ -1,12 +1,15 @@
 [Unit]
-Description=ECE449 Detect Script – wait until Wi‑Fi truly ready
-After=network.target dhcpcd.service
+Description=ECE449 Detect Script
+# "network-online.target" is safer than "network.target" for wifi scripts
+After=network-online.target dhcpcd.service
 Requires=dhcpcd.service
 
 [Service]
 User=rpi
 WorkingDirectory=/home/rpi/Desktop/ECE449/ECE-449-
-# Wait until wlan0 has an IP address
+# This ensures print() statements show up in journalctl immediately
+Environment=PYTHONUNBUFFERED=1
+
 ExecStartPre=/bin/bash -c 'until /sbin/ip addr show wlan0 | grep -q "inet "; do echo "Waiting for wlan0 IP..."; sleep 3; done'
 ExecStart=/usr/bin/python3 /home/rpi/Desktop/ECE449/ECE-449-/detect.py
 Restart=always
