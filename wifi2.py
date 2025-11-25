@@ -3,7 +3,7 @@ import socket
 def sendWiFi():
     for i in range(0, 256):
         ESP_IP = f"192.168.68.{i}"
-        PORT = 4210
+        PORT = 5005
         cmd = "DETER"
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.sendto(cmd.encode(), (ESP_IP, PORT))
