@@ -19,7 +19,7 @@ def get_wlan0_ip():
         return local_ip
     except:
         print("Warning: Could not automatically determine local IP. Using 0.0.0.0.")
-        return '0.0.0.0' # Fail-safe
+        return '0.0.0.0' # Fail-safe 
 
 
 def sendWiFi():
