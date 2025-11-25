@@ -92,9 +92,14 @@ def capture_image(source: str, camera_num):
     else:
         out_path = ALLPHOTOS_DIR / filename
     
-    # capture image from specified camera
+    # capture image from specified camera + silence sensor output
     try:
-        subprocess.run([RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], check=True)
+        subprocess.run(
+            [RPICAM_CMD, "--camera", camera_num, "-o", str(out_path)], 
+            check=True,
+            stdout=subprocess.DEVNULL,  # Silences standard output
+            stderr=subprocess.DEVNULL   # Silences errors/warnings (camera debug info)
+        )
         print(f"Image captured: {out_path}")
         return out_path
     except subprocess.CalledProcessError as e:
