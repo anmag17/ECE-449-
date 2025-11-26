@@ -11,7 +11,6 @@ import socket
 FARM_MODE = True
 
 print("Starting detect.py...")
-print("test")
 # ====== CONFIG ======
 # photo storage
 if not FARM_MODE:
