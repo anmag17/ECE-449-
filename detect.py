@@ -29,7 +29,10 @@ MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained YOLOv3 mod
 #ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
 #PORT = 4210                  # must match ESP32 code
 #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+SOURCE_IP = "192.168.68.112"   # your Pi IP
+DEST_IP   = "192.168.68.150"   # your ESP IP
+PORT      = 5005
+MESSAGE   = "D3"
 # YOLO model
 CONF = 0.25
 IMGSZ = 416
@@ -46,10 +49,7 @@ ledstrip = LED(16)
 # ====== HELPER FUNCTIONS ======
 
 def sendWiFi():
-    SOURCE_IP = "192.168.68.112"   # your Pi IP
-    DEST_IP   = "192.168.68.150"   # your ESP IP
-    PORT      = 5005
-    MESSAGE   = "D3"
+    
     # Create UDP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to your Pi's IP so the packet uses the correct interface
