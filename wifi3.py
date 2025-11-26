@@ -27,6 +27,3 @@ def sendWiFi():
         
     except Exception as e:
         print(f"Error sending WiFi: {e}")
-
-if __name__ == "__main__":
-    sendWiFi()
