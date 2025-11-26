@@ -16,11 +16,11 @@ def sendWiFi():
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         
         # *** CRITICAL FIX: Explicitly bind the socket to the local Wi-Fi interface's IP ***
-        sock.bind((local_source_ip, 0)) # 0 means use any available port
+        #sock.bind((local_source_ip, 0)) # 0 means use any available port
         sock.connect((ESP_IP, PORT))
         sock.sendto(cmd.encode(), (ESP_IP, PORT))
         sock.close()
-        print(f"WiFi broadcast '{cmd}' sent from {local_source_ip} to {ESP_IP}")
+        #print(f"WiFi broadcast '{cmd}' sent from {local_source_ip} to {ESP_IP}")
         
     except Exception as e:
         # The script is crashing here. This print statement will now show you the error!
