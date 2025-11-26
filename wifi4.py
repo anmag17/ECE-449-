@@ -3,23 +3,6 @@ import sys
 # You might need the 'netifaces' library here, but a simpler method is often to use the 'ip' library result.
 # For simplicity, we'll try a common trick:
 
-def get_wlan0_ip():
-    # Placeholder: In a real system, you'd use 'socket.gethostbyname(socket.gethostname())'
-    # or an external library/command to reliably get the wlan0 IP.
-    # For now, let's assume the router is .1 and we're looking for the broadcast source IP.
-    
-    # A reliable way on a Pi is to look up the IP of the wlan0 interface.
-    # Let's use a try-catch and rely on the IP being in the range 192.168.68.X
-    try:
-        # Create a temporary socket to determine the local IP used for external communication
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("192.168.68.1", 1)) # Connect to the router/gateway on the network
-        local_ip = s.getsockname()[0]
-        s.close()
-        return local_ip
-    except:
-        print("Warning: Could not automatically determine local IP. Using 0.0.0.0.")
-        return '0.0.0.0' # Fail-safe 
 
 
 def sendWiFi():
