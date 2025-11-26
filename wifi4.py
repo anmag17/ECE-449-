@@ -8,7 +8,7 @@ def sendWiFi():
         cmd = sys.argv[1] if len(sys.argv)  > 1 else "D3"
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        #sock.bind(("192.168.68.25", 0))  # BIND TO THE WIFI MESH IP
+        sock.bind(("192.168.68.112", 0))  # BIND TO rpi
         sock.connect((ESP_IP, PORT))
         sock.sendto(cmd.encode(), (ESP_IP, PORT))
         sock.close()

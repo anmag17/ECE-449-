@@ -6,13 +6,12 @@ from gpiozero import MotionSensor, LED
 from ultralytics import YOLO
 import cv2
 import socket
-import sys
 
 # set to True for farm testing (saves images in a separate folder)
 FARM_MODE = True
 
 print("Starting detect.py...")
-
+print("test")
 # ====== CONFIG ======
 # photo storage
 if not FARM_MODE:
