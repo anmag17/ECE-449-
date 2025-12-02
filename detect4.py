@@ -6,6 +6,7 @@ from gpiozero import MotionSensor, LED
 from ultralytics import YOLO
 import cv2
 import socket
+import sys
 
 # set to True for farm testing (saves images in a separate folder)
 FARM_MODE = True
@@ -49,17 +50,17 @@ ledstrip = LED(16)
 # ====== HELPER FUNCTIONS ======
 
 def sendWiFi():
-    
-    # Create UDP socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # Bind to your Pi's IP so the packet uses the correct interface
-    sock.bind((SOURCE_IP, 0))
-    # Connect to the ESP so OS chooses correct routing/path (nc behavior)
-    sock.connect((DEST_IP, PORT))
-    # Send the message
-    sock.send(MESSAGE.encode())
-    print(f"Sent '{MESSAGE}' from {SOURCE_IP} -> {DEST_IP}:{PORT}")
-    sock.close()
+    for i in range(0, 255):
+        ESP_IP = f"192.168.68.{i}" 
+        PORT = 5005
+        cmd = sys.argv[1] if len(sys.argv)  > 1 else "D3"
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind(("192.168.68.112", 0))  # BIND TO rpi
+        sock.connect((ESP_IP, PORT))
+        sock.sendto(cmd.encode(), (ESP_IP, PORT))
+        sock.close()
+        print(f"Sent '{cmd}' to {ESP_IP}:{PORT}")
 
 # function to determine if lights are needed for night images (after 5pm or before 9am)
 def is_night_time():
