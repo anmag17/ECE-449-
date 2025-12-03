@@ -127,9 +127,10 @@ def run_yolo_and_save(image_path: Path):
 
 # ===== MAIN LOOP ======
 
-# possible target classes from pre-trained YOLOv3 model
+# possible target classes from pre-trained YOLOv3 model + "Animal" from fine tuned
 TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow", "rat", 
-                  "otter", "dog", "mouse", "horse", "sheep", "bear", "bird", "zebra", "giraffe", "banana"}
+                  "otter", "dog", "mouse", "horse", "sheep", "bear", "bird", "zebra", "giraffe", "banana",
+                  "Animal"}
 
 print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
 
