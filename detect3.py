@@ -35,7 +35,7 @@ PORT      = 5005
 MESSAGE   = "D3"
 # YOLO model
 CONF = 0.5      # confidence threshold
-IMGSZ = 416
+IMGSZ = 1024
 DEVICE = "cpu"
 model = YOLO(MODEL_PATH)
 
