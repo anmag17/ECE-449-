@@ -35,8 +35,8 @@ DEST_IP   = "192.168.68.150"   # your ESP IP
 PORT      = 5005
 MESSAGE   = "D3"
 # YOLO model
-CONF = 0.5
-IMGSZ = 1024
+CONF = 0.37         # change with detect3
+IMGSZ = 1024 
 DEVICE = "cpu"
 model = YOLO(MODEL_PATH)
 
@@ -131,7 +131,7 @@ def run_yolo_and_save(image_path: Path):
 # possible target classes from pre-trained YOLOv3 model
 TARGET_CLASSES = {"teddy bear", "groundhog", "raccoon", "squirrel", "cat", "elephant", "cow", "rat", 
                   "otter", "dog", "mouse", "horse", "sheep", "bear", "bird", "zebra", "giraffe", "banana",
-                  "Animal"}
+                  "animal"}
 
 print("PIR Motion sensors active (GPIO 20, 21, 26). Lights on GPIO 27.")
 
