@@ -35,7 +35,7 @@ DEST_IP   = "192.168.68.150"   # your ESP IP
 PORT      = 5005
 MESSAGE   = "D3"
 # YOLO model
-CONF = 0.37         # change with detect3
+CONF = 0.4         # change with detect3
 IMGSZ = 1024 
 DEVICE = "cpu"
 model = YOLO(MODEL_PATH)
