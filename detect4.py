@@ -24,7 +24,7 @@ else:
     ANNOTATED_DIR.mkdir(parents=True, exist_ok=True)
 
 RPICAM_CMD = "rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/ECE-449-/FINAL_best_model.pt" # fine-tuned YOLOv3 model
+MODEL_PATH = "/home/rpi/Desktop/ECE449/ECE-449-/best_animal.pt" # fine-tuned YOLOv3 model
 
 # Wifi ping
 #ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
