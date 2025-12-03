@@ -23,7 +23,7 @@ else:
     ANNOTATED_DIR.mkdir(parents=True, exist_ok=True)
 
 RPICAM_CMD = "rpicam-jpeg"
-MODEL_PATH = "/home/rpi/Desktop/ECE449/yolov3-tinyu.pt" # pre-trained YOLOv3 model
+MODEL_PATH = "/home/rpi/Desktop/ECE449/ECE-449-/best_animal.pt" # fine-tuned YOLOv3 model
 
 # Wifi ping
 #ESP32_IP = "192.168.68.150"  # Deter ESP32 IP address for wifi ping
@@ -34,7 +34,7 @@ DEST_IP   = "192.168.68.150"   # your ESP IP
 PORT      = 5005
 MESSAGE   = "D3"
 # YOLO model
-CONF = 0.10
+CONF = 0.5      # confidence threshold
 IMGSZ = 416
 DEVICE = "cpu"
 model = YOLO(MODEL_PATH)
